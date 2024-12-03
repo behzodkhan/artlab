@@ -36,7 +36,7 @@ function AboutPage() {
           <p className="text-xl sm:text-2xl text-center mb-8 font-serif text-gray-700">
             "Celebrating and sharing the beauty of art with the world, one masterpiece at a time."
           </p>
-          <div className="h-1 w-32 bg-lime-600 mx-auto mb-8"></div>
+          <div className="h-1 w-32 bg-lime-500 mx-auto mb-8"></div>
           <p className="text-lg leading-relaxed mb-4">
           Dovuchcha ArtLab is a platform dedicated to connecting artists, enthusiasts, and the global community. Building on the legacy of Dovuchcha, we aim to create a space where creativity thrives and inspiration is shared freely. Our goal is to bridge gaps in the art world, fostering an environment where people can explore and appreciate diverse forms of artistic expression.
           </p>
