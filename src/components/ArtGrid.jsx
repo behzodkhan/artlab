@@ -98,7 +98,7 @@ function ArtGrid({ artPieces }) {
   const maxImageHeight = 5000; // Define the maximum allowed height for images
 
   if (loading) {
-    return <LoadingSpinner message="Loading Art Pieces..." />;
+    return <LoadingSpinner context="Loading Art Pieces..." />;
   }
 
   if (error) {
