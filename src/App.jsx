@@ -11,6 +11,7 @@ import AboutPage from './pages/AboutPage';
 import WaitingRoom from './pages/WaitingRoom';
 import ArtPieceDetailPage from './pages/ArtPieceDetail';
 import ArtistDetailPage from './pages/ArtistsDetail';
+import { Analytics } from "@vercel/analytics/react"
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/contribute/success" element={<SuccessPage />} />
         </Routes>
       </RootLayout>
+      <Analytics/>
     </Router>
   );
 }
