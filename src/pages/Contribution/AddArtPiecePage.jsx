@@ -98,7 +98,6 @@ function AddArtPiecePage() {
 
       if (response.ok) {
         console.log('Art piece created successfully');
-        alert('Art piece created successfully!');
         navigate('/contribute/success');
       } else {
         const errorData = await response.json();

@@ -79,7 +79,6 @@ function AddArtistPage() {
 
       if (response.ok) {
         console.log('Artist created successfully');
-        alert('Artist created successfully!');
         navigate('/contribute/success');
       } else {
         const errorData = await response.json();
