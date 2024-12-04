@@ -25,12 +25,12 @@ export default function ArtPieceDetailPage() {
   useEffect(() => {
     const fetchArtPiece = async () => {
       try {
-        const response = await fetch(`https://behzod.pythonanywhere.com/api/art_pieces/${id}/`);
+        const response = await fetch(`https://artlab.pythonanywhere.com/api/art_pieces/${id}/`);
         if (!response.ok) throw new Error('Failed to fetch art piece');
         const data = await response.json();
         setArtPiece(data);
 
-        const artistResponse = await fetch(`https://behzod.pythonanywhere.com/api/artists/${data.artist}/`);
+        const artistResponse = await fetch(`https://artlab.pythonanywhere.com/api/artists/${data.artist}/`);
         if (!artistResponse.ok) throw new Error('Failed to fetch artist');
         const artistData = await artistResponse.json();
         setArtist(artistData);
@@ -43,7 +43,7 @@ export default function ArtPieceDetailPage() {
 
     const fetchGenres = async () => {
       try {
-        const response = await fetch(`https://behzod.pythonanywhere.com/api/genres/`);
+        const response = await fetch(`https://artlab.pythonanywhere.com/api/genres/`);
         if (!response.ok) throw new Error('Failed to fetch genres');
         const data = await response.json();
         const genreMap = data.reduce((acc, genre) => {
@@ -58,7 +58,7 @@ export default function ArtPieceDetailPage() {
 
     const fetchComments = async () => {
       try {
-        const response = await fetch(`https://behzod.pythonanywhere.com/api/art_pieces/${id}/comments/`);
+        const response = await fetch(`https://artlab.pythonanywhere.com/api/art_pieces/${id}/comments/`);
         if (!response.ok) throw new Error('Failed to fetch comments');
         const data = await response.json();
         setComments(data.reverse());
@@ -81,7 +81,7 @@ export default function ArtPieceDetailPage() {
 
   const getOrCreateProfile = async () => {
     try {
-      const response = await fetch('https://behzod.pythonanywhere.com/api/profiles/', {
+      const response = await fetch('https://artlab.pythonanywhere.com/api/profiles/', {
       });
       if (!response.ok) throw new Error('Failed to fetch profiles');
 
@@ -93,7 +93,7 @@ export default function ArtPieceDetailPage() {
         return existingProfile.id;
       }
 
-      const createResponse = await fetch('https://behzod.pythonanywhere.com/api/profiles/', {
+      const createResponse = await fetch('https://artlab.pythonanywhere.com/api/profiles/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export default function ArtPieceDetailPage() {
 
       const bodyData = { art_piece: id, content: newCommentContent, owner: ownerId };
 
-      const response = await fetch(`https://behzod.pythonanywhere.com/api/art_pieces/${id}/comments/`, {
+      const response = await fetch(`https://artlab.pythonanywhere.com/api/art_pieces/${id}/comments/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ export default function ArtPieceDetailPage() {
 
       console.log('Submitting reply:', bodyData);
 
-      const response = await fetch(`https://behzod.pythonanywhere.com/api/art_pieces/${id}/comments/`, {
+      const response = await fetch(`https://artlab.pythonanywhere.com/api/art_pieces/${id}/comments/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bodyData),

@@ -44,7 +44,7 @@ function ArtGrid({ artPieces }) {
     const fetchData = async () => {
       try {
         // Fetch genres
-        const genreResponse = await fetch('https://behzod.pythonanywhere.com/api/genres/');
+        const genreResponse = await fetch('https://artlab.pythonanywhere.com/api/genres/');
         if (!genreResponse.ok) throw new Error('Failed to fetch genres');
         const genreData = await genreResponse.json();
         const genreMap = genreData.reduce((acc, genre) => {
@@ -58,7 +58,7 @@ function ArtGrid({ artPieces }) {
 
         // Fetch all artist data in parallel
         const artistPromises = artistIds.map(async (id) => {
-          const response = await fetch(`https://behzod.pythonanywhere.com/api/artists/${id}`);
+          const response = await fetch(`https://artlab.pythonanywhere.com/api/artists/${id}`);
           if (!response.ok) throw new Error(`Failed to fetch artist with ID ${id}`);
           const artist = await response.json();
           return { id: artist.id, data: artist };

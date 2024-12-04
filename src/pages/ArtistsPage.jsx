@@ -17,7 +17,7 @@ export default function ArtistsPage() {
   useEffect(() => {
     const fetchArtists = async () => {
       try {
-        const response = await axios.get('https://behzod.pythonanywhere.com/api/artists/'); // Removed double slash
+        const response = await axios.get('https://artlab.pythonanywhere.com/api/artists/'); // Removed double slash
         setArtists(response.data);
         setIsLoading(false);
       } catch (error) {

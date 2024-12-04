@@ -67,7 +67,7 @@ function AddArtistPage() {
     formDataToSubmit.append('is_verified', 'false'); // Default to unverified
 
     try {
-      const response = await fetch('https://behzod.pythonanywhere.com/api/artists/', {
+      const response = await fetch('https://artlab.pythonanywhere.com/api/artists/', {
         method: 'POST',
         body: formDataToSubmit,
         headers: isAuthenticated

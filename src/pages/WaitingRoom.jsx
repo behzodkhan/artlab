@@ -20,7 +20,7 @@ export default function WaitingRoom() {
   useEffect(() => {
     const fetchContributions = async () => {
       try {
-        const response = await fetch('https://behzod.pythonanywhere.com/api/contributions');
+        const response = await fetch('https://artlab.pythonanywhere.com/api/contributions');
         if (!response.ok) {
           throw new Error('Failed to fetch contributions');
         }

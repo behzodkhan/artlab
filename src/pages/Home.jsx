@@ -15,7 +15,7 @@ export default function Home() {
   useEffect(() => {
     const fetchArtPieces = async () => {
       try {
-        const response = await axios.get('https://behzod.pythonanywhere.com/api/art_pieces/');
+        const response = await axios.get('https://artlab.pythonanywhere.com/api/art_pieces/');
         setArtPieces(response.data);
         setFilteredArtPieces(response.data);
         setIsLoading(false);

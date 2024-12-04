@@ -12,7 +12,7 @@ export const useHandleReply = () => {
 
       if (isAuthenticated) {
         // Fetch the Profile by username
-        const profileResponse = await axios.get('https://behzod.pythonanywhere.com/api/profiles/', {
+        const profileResponse = await axios.get('https://artlab.pythonanywhere.com/api/profiles/', {
           params: { username },
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -25,7 +25,7 @@ export const useHandleReply = () => {
         } else {
           // Create a new Profile
           const createProfileResponse = await axios.post(
-            'https://behzod.pythonanywhere.com/api/profiles/',
+            'https://artlab.pythonanywhere.com/api/profiles/',
             { username, email },
             {
               headers: {
@@ -42,7 +42,7 @@ export const useHandleReply = () => {
 
       // Create the Comment
       await axios.post(
-        'https://behzod.pythonanywhere.com/api/comments/',
+        'https://artlab.pythonanywhere.com/api/comments/',
         {
           parent: parentId,
           content,

@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   // Function to fetch access token using refresh token
   const fetchAccessToken = async (token) => {
     try {
-      const response = await axios.post('https://behzod.pythonanywhere.com/api/token/refresh/', {
+      const response = await axios.post('https://artlab.pythonanywhere.com/api/token/refresh/', {
         refresh: token,
       });
       const newAccessToken = response.data.access;

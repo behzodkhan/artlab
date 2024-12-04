@@ -31,7 +31,7 @@ function AddArtPiecePage() {
     // Fetch the list of artists from the backend
     const fetchArtists = async () => {
       try {
-        const response = await fetch('https://behzod.pythonanywhere.com/api/artists/');
+        const response = await fetch('https://artlab.pythonanywhere.com/api/artists/');
         if (response.ok) {
           const data = await response.json();
           setArtists(data);
@@ -86,7 +86,7 @@ function AddArtPiecePage() {
     formDataToSubmit.append('is_verified', 'false'); // Default to unverified
 
     try {
-      const response = await fetch('https://behzod.pythonanywhere.com/api/art_pieces/', {
+      const response = await fetch('https://artlab.pythonanywhere.com/api/art_pieces/', {
         method: 'POST',
         body: formDataToSubmit,
         headers: isAuthenticated
