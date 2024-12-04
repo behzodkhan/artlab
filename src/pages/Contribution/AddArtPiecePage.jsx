@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+// src/pages/AddArtPiecePage.jsx
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectItem, SelectTrigger, SelectValue, SelectContent } from '@/components/ui/select';
+import { AuthContext } from '@/contexts/AuthContext'; // Import AuthContext
 
 function AddArtPiecePage() {
   const navigate = useNavigate();
+  const { isAuthenticated, email: userEmail, accessToken, isLoading } = useContext(AuthContext); // Destructure from AuthContext
+
   const [formData, setFormData] = useState({
     title: '',
     artist: '',
@@ -15,43 +19,60 @@ function AddArtPiecePage() {
     medium: '',
     description: '',
     photo: null,
-    email: '',
+    email: isAuthenticated ? userEmail : '', // Initialize based on authentication
     is_contributed: 'true'
   });
 
   const [artists, setArtists] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to manage submission
+  const [isFetchingArtists, setIsFetchingArtists] = useState(true); // Separate loading state for artists
 
   useEffect(() => {
     // Fetch the list of artists from the backend
     const fetchArtists = async () => {
       try {
-        const response = await fetch('https://artlab.pythonanywhere.com/api/artists/');
-        const data = await response.json();
-        setArtists(data);
-        setIsLoading(false);
+        const response = await fetch('https://behzod.pythonanywhere.com/api/artists/');
+        if (response.ok) {
+          const data = await response.json();
+          setArtists(data);
+        } else {
+          console.error('Failed to fetch artists:', response.statusText);
+          alert('Failed to load artists. Please try again later.');
+        }
       } catch (error) {
         console.error('Error fetching artists:', error);
-        setIsLoading(false);
+        alert('An error occurred while fetching artists.');
+      } finally {
+        setIsFetchingArtists(false);
       }
     };
 
     fetchArtists();
   }, []);
 
+  // Handle input changes for text fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Prevent changes to email if authenticated
+    if (isAuthenticated && name === 'email') {
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle file input changes
   const handleFileChange = (e) => {
-    if (e.target.files) {
+    if (e.target.files && e.target.files[0]) {
       setFormData((prev) => ({ ...prev, photo: e.target.files[0] }));
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // Start submission
 
     const formDataToSubmit = new FormData();
     formDataToSubmit.append('is_contributed', 'true');
@@ -61,33 +82,51 @@ function AddArtPiecePage() {
     formDataToSubmit.append('medium', formData.medium);
     formDataToSubmit.append('description', formData.description);
     formDataToSubmit.append('image', formData.photo);
-    formDataToSubmit.append('contributor_email', formData.email);
+    formDataToSubmit.append('contributor_email', isAuthenticated ? userEmail : formData.email);
+    formDataToSubmit.append('is_verified', 'false'); // Default to unverified
 
     try {
-      const response = await fetch('https://artlab.pythonanywhere.com/api/art_pieces/', {
+      const response = await fetch('https://behzod.pythonanywhere.com/api/art_pieces/', {
         method: 'POST',
         body: formDataToSubmit,
+        headers: isAuthenticated
+          ? {
+              Authorization: `Bearer ${accessToken}`, // Include access token if authenticated
+            }
+          : {},
       });
 
       if (response.ok) {
         console.log('Art piece created successfully');
+        alert('Art piece created successfully!');
         navigate('/contribute/success');
       } else {
         const errorData = await response.json();
         console.error('Failed to create art piece:', errorData);
-        console.log(formDataToSubmit)
-        alert('Failed to create the art piece. Please try again.');
+        alert(`Failed to create the art piece: ${errorData.detail || 'Please try again.'}`);
       }
     } catch (error) {
       console.error('Error submitting art piece data:', error);
       alert('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false); // End submission
     }
   };
+
+  // Prevent rendering the form until loading is complete
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader">Loading...</div> {/* Replace with your loader component */}
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Add an Art Piece</h1>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
+        {/* Art Piece Title */}
         <div className="space-y-2">
           <Label htmlFor="title">Art Piece Title</Label>
           <Input
@@ -100,21 +139,22 @@ function AddArtPiecePage() {
             onChange={handleInputChange}
           />
         </div>
+
+        {/* Artist */}
         <div className="space-y-2">
           <Label htmlFor="artist">Artist</Label>
-          {isLoading ? (
+          {isFetchingArtists ? (
             <p>Loading artists...</p>
           ) : (
             <Select
               onValueChange={(value) =>
                 setFormData((prev) => ({ ...prev, artist: value }))
               }
+              value={formData.artist}
+              required
             >
               <SelectTrigger>
-                <SelectValue
-                  placeholder="Select an artist"
-                  defaultValue={formData.artist}
-                />
+                <SelectValue placeholder="Select an artist" />
               </SelectTrigger>
               <SelectContent>
                 {artists.map((artist) => (
@@ -126,6 +166,8 @@ function AddArtPiecePage() {
             </Select>
           )}
         </div>
+
+        {/* Year Created */}
         <div className="space-y-2">
           <Label htmlFor="year">Year Created</Label>
           <Input
@@ -139,6 +181,8 @@ function AddArtPiecePage() {
             onChange={handleInputChange}
           />
         </div>
+
+        {/* Medium */}
         <div className="space-y-2">
           <Label htmlFor="medium">Medium</Label>
           <Input
@@ -151,6 +195,8 @@ function AddArtPiecePage() {
             onChange={handleInputChange}
           />
         </div>
+
+        {/* Description */}
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
           <Textarea
@@ -163,6 +209,8 @@ function AddArtPiecePage() {
             onChange={handleInputChange}
           />
         </div>
+
+        {/* Photo */}
         <div className="space-y-2">
           <Label htmlFor="photo">Photo</Label>
           <Input
@@ -175,21 +223,30 @@ function AddArtPiecePage() {
             onChange={handleFileChange}
           />
         </div>
+
+        {/* Contact Email */}
         <div className="space-y-2">
           <Label htmlFor="email">Contact Email</Label>
           <Input
-            placeholder="contributor@example.com"
+            placeholder={isAuthenticated ? userEmail : "contributor@example.com"}
             className="focus-visible:ring-lime-500"
             id="email"
             name="email"
             type="email"
-            required
-            value={formData.email}
+            required={!isAuthenticated} // Make required only if not authenticated
+            value={isAuthenticated ? userEmail : formData.email}
             onChange={handleInputChange}
+            disabled={isAuthenticated} // Disable if authenticated
           />
         </div>
-        <Button type="submit" className="w-full bg-lime-500 hover:bg-lime-600">
-          Submit
+
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          className="w-full bg-lime-500 hover:bg-lime-600"
+          disabled={isSubmitting} // Disable while submitting
+        >
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </Button>
       </form>
     </div>

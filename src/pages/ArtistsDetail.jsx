@@ -16,7 +16,7 @@ export default function ArtistDetailPage() {
   useEffect(() => {
     const fetchArtist = async () => {
       try {
-        const response = await fetch(`https://artlab.pythonanywhere.com/api/artists/${id}/`);
+        const response = await fetch(`https://behzod.pythonanywhere.com/api/artists/${id}/`);
         if (!response.ok) throw new Error('Failed to fetch artist');
         const data = await response.json();
         setArtist(data);

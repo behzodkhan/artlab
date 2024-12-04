@@ -1,21 +1,23 @@
-// Navbar.jsx
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react'; // Importing hamburger and close icons
+import { Menu, X } from 'lucide-react';
 import logo from './logo.png';
-import { Button } from './ui/button';
+import { AuthContext } from '@/contexts/AuthContext';
 
 export default function Navbar() {
   const location = useLocation();
+  const { isAuthenticated, username, handleLoginRedirect, handleLogout, isLoading } = useContext(AuthContext);
   const isActive = (path) => location.pathname === path;
 
-  // State to manage mobile menu visibility
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Function to toggle mobile menu
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <nav className="bg-white shadow-md">
@@ -62,19 +64,42 @@ export default function Navbar() {
               >
                 About
               </Link>
-            </div>
-          </div>
-
-          {/* Right side: Desktop Contribute Button and Mobile Menu Button */}
-          <div className="flex items-center">
-            {/* Desktop Contribute Button */}
-            <div className="hidden sm:ml-6 sm:flex sm:items-center">
+              {/* New Contribute Link */}
               <Link
                 to="/contribute"
-                className="bg-lime-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500"
+                className={`${
+                  isActive('/contribute')
+                    ? 'border-lime-400 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
               >
                 Contribute
               </Link>
+            </div>
+          </div>
+
+          {/* Right side: Desktop Auth Buttons and Mobile Menu Button */}
+          <div className="flex items-center">
+            {/* Desktop Auth Buttons */}
+            <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+              {!isAuthenticated ? (
+                <button
+                  onClick={handleLoginRedirect}
+                  className="bg-lime-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500"
+                >
+                  Login
+                </button>
+              ) : (
+                <>
+                  <span className="text-gray-700">Hello, {username}!</span>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-red-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
             {/* Mobile Menu Button */}
             <div className="sm:hidden">
@@ -134,13 +159,41 @@ export default function Navbar() {
             >
               About
             </Link>
+            {/* New Contribute Link */}
             <Link
               to="/contribute"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium bg-lime-500 text-white hover:bg-lime-600"
+              className={`${
+                isActive('/contribute')
+                  ? 'bg-lime-50 border-lime-400 text-lime-700'
+                  : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800'
+              } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
             >
               Contribute
             </Link>
+            {/* Mobile Auth Buttons */}
+            <div className="pt-4 pb-3 border-t border-gray-200">
+              {!isAuthenticated ? (
+                <button
+                  onClick={handleLoginRedirect}
+                  className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium bg-lime-500 text-white hover:bg-lime-600"
+                >
+                  Login
+                </button>
+              ) : (
+                <div className="flex items-center pl-3 pr-4 py-2 border-l-4 border-transparent">
+                  <div className="ml-3">
+                    <div className="text-base font-medium text-gray-800">Hello, {username}!</div>
+                    <button
+                      onClick={handleLogout}
+                      className="mt-1 text-sm text-red-600 hover:text-red-800"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
