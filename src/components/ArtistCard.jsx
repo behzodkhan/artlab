@@ -48,6 +48,8 @@ function getEraBadgeColor(era) {
       return 'bg-pink-100 text-pink-800';
     case 'Realism':
       return 'bg-teal-100 text-teal-800';
+    case 'Symbolism':
+      return 'bg-lime-100 text-lime-800';
     default:
       return 'bg-gray-100 text-gray-800';
   }

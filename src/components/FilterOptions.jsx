@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function FilterOptions({ onFilterChange, selectedFilter }) {
-  const filters = ['All', 'Modern', 'Contemporary', 'Classical', 'Renaissance', 'Baroque', 'Realism'];
+  const filters = ['All', 'Modern', 'Contemporary', 'Classical', 'Renaissance', 'Baroque', 'Realism', 'Symbolism'];
 
   return (
     <div className="flex flex-wrap justify-center gap-2 my-4">
