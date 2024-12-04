@@ -61,7 +61,7 @@ export default function ArtPieceDetailPage() {
         const response = await fetch(`https://artlab.pythonanywhere.com/api/art_pieces/${id}/comments/`);
         if (!response.ok) throw new Error('Failed to fetch comments');
         const data = await response.json();
-        setComments(data.reverse());
+        setComments(data.reverse()); 
       } catch (error) {
         console.error('Error fetching comments:', error);
       }
