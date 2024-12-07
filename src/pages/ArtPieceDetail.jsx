@@ -115,7 +115,7 @@ const { colors, loading } = useExtractColors(proxyImage, {
       return newProfile.id;
     } catch (error) {
       console.error('Error in getOrCreateProfile:', error);
-      return '1'; // Default to Anonymous profile
+      return '1';
     }
   };
 
@@ -157,8 +157,11 @@ const { colors, loading } = useExtractColors(proxyImage, {
     if (!content.trim()) return;
 
     try {
-      // Include 'art_piece' in the body
-      const bodyData = { art_piece: id, content, parent: parentId };
+      let ownerId = '1';
+      if (isAuthenticated) {
+        ownerId = await getOrCreateProfile();
+      }
+      const bodyData = { art_piece: id, content: newCommentContent, owner: ownerId };
 
       console.log('Submitting reply:', bodyData);
 
