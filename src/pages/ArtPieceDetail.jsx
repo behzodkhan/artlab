@@ -73,13 +73,12 @@ export default function ArtPieceDetailPage() {
   }, [id]);
 
   const proxyBaseUrl = "https://artlab.pythonanywhere.com/api/proxy-media/";
-
-const proxyImage = artPiece?.image
-  ? artPiece.image.replace(
-      "https://artlab.pythonanywhere.com/media/",
-      proxyBaseUrl
-    )
-  : "";
+  const proxyImage = artPiece?.image
+    ? artPiece.image.replace(
+        "https://artlab.pythonanywhere.com/media/",
+        proxyBaseUrl
+      )
+    : "";
 
 const { colors, loading } = useExtractColors(proxyImage, {
   maxColors: 12,
