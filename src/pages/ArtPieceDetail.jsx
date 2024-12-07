@@ -77,6 +77,7 @@ export default function ArtPieceDetailPage() {
     format: 'hex',
     maxSize: 200,
     orderBy: 'vibrance',
+    crossOrigin: 'anonymous',
   });
 
   const getOrCreateProfile = async () => {
