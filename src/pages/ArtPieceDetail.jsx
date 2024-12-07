@@ -72,13 +72,21 @@ export default function ArtPieceDetailPage() {
     fetchComments();
   }, [id]);
 
-  const { colors, loading } = useExtractColors(artPiece?.image || '', {
-    maxColors: 12,
-    format: 'hex',
-    maxSize: 200,
-    orderBy: 'vibrance',
-    crossOrigin: 'anonymous',
-  });
+  const proxyBaseUrl = "https://artlab.pythonanywhere.com/api/proxy-media/";
+
+const proxyImage = artPiece?.image
+  ? artPiece.image.replace(
+      "https://artlab.pythonanywhere.com/media/",
+      proxyBaseUrl
+    )
+  : "";
+
+const { colors, loading } = useExtractColors(proxyImage, {
+  maxColors: 12,
+  format: "hex",
+  maxSize: 200,
+  orderBy: "vibrance",
+});
 
   const getOrCreateProfile = async () => {
     try {
